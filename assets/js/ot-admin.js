@@ -575,7 +575,7 @@
       });
     },
     remove_image: function(e) {
-      $(e).parent().parent().find('.option-tree-ui-upload-input').attr('value','');
+      $(e).parent().parent().find('.option-tree-ui-upload-input').attr('value','').next('input').attr('value', '');
       $(e).parent('.option-tree-ui-media-wrap').remove();
     },
     fix_textarea: function() {
