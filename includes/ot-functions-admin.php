@@ -3746,6 +3746,8 @@ if ( ! function_exists( 'ot_list_item_view' ) ) {
           'form_name'         => $_field_name,
           'id'                => $field['id'],
           'key'               => $key,
+          'list_item'         => $list_item,
+
           'type'              => $field['type'],
           'field_id'          => $name . '_' . $field['id'] . '_' . $key,
           'field_name'        => $_field_name . '[' . $key . '][' . $field['id'] . ']',

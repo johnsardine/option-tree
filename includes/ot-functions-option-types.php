@@ -2224,8 +2224,21 @@ if ( ! function_exists( 'ot_type_upload' ) ) {
         /* build upload */
         echo '<div class="option-tree-ui-upload-parent">';
           
+          if ( isset($args['list_item']) ) {
+            $id_field_name = $args['form_name'] . '[' . $args['key'] . '][' . $args['id'] . '_id]';
+            $id_field_id = $args['name'] . '_' . $args['id'] . '_' . $args['key'] . '_id';
+            $id_field_value = (!empty($args['list_item'][$args['id'].'_id'])) ? $args['list_item'][$args['id'].'_id'] : 0;
+          } else {
+            $id_field_name = $field_name . '_id';
+            $id_field_id = $field_id . '_id';
+            $id_field_value = ($_GET['post']) ? get_post_meta( $_GET['post'], $id_field_id, true ) : 0;
+          }
+
           /* input */
           echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_id ) . '" value="' . esc_attr( $field_value ) . '" class="widefat option-tree-ui-upload-input ' . esc_attr( $field_class ) . '" />';
+
+          /* input with id */
+          echo '<input type="hidden" name="' . esc_attr( $id_field_name ) . '" id="' . esc_attr( $id_field_id ) . '" value="' . esc_attr( $id_field_value ) . '" />';
           
           /* add media button */
           echo '<a href="javascript:void(0);" class="ot_upload_media option-tree-ui-button button button-primary light" rel="' . $post_id . '" title="' . __( 'Add Media', 'option-tree' ) . '"><span class="icon ot-icon-plus-sign"></span>' . __( 'Add Media', 'option-tree' ) . '</a>';

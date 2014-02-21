@@ -266,6 +266,18 @@ if ( ! class_exists( 'OT_Meta_Box' ) ) {
           }
         
         }
+        if ( $field['type'] === 'upload' ) {
+
+          $id_old = get_post_meta( $post_id, $field['id'].'_id', true );
+          $id_new = $_POST[$field['id'].'_id'];
+
+          if ( isset( $id_new ) && $id_new !== $id_old ) {
+            update_post_meta( $post_id, $field['id'].'_id', $id_new );
+          } else if ( '' == $id_new && $id_old ) {
+            delete_post_meta( $post_id, $field['id'].'_id', $id_old );
+          }
+
+        }
         
         if ( isset( $new ) && $new !== $old ) {
           update_post_meta( $post_id, $field['id'], $new );
