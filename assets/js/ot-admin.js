@@ -558,6 +558,7 @@
       $('#'+field_id).datepicker({
         showOtherMonths: true,
         showButtonPanel: true,
+        dateFormat : 'yy-mm-dd',
         currentText: option_tree.date_current,
         closeText: option_tree.date_close
       });
