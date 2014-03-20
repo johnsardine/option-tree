@@ -563,6 +563,65 @@ if ( ! function_exists( 'ot_type_custom_post_type_checkbox' ) ) {
   
 }
 
+if ( ! function_exists( 'ot_type_custom_post_type_checkbox_orderable' ) ) {
+  
+  function ot_type_custom_post_type_checkbox_orderable( $args = array() ) {
+    
+    /* turns arguments array into variables */
+    extract( $args );
+    
+    /* verify a description */
+    $has_desc = $field_desc ? true : false;
+    
+    /* format setting outer wrapper */
+    echo '<div class="format-setting type-custom-post-type-checkbox type-checkbox ' . ( $has_desc ? 'has-desc' : 'no-desc' ) . '">';
+      
+      /* description */
+      echo $has_desc ? '<div class="description">' . htmlspecialchars_decode( $field_desc ) . '</div>' : '';
+      
+      /* format setting inner wrapper */
+      echo '<div class="format-setting-inner">';
+        
+        /* setup the post types */
+        $post_type = isset( $field_post_type ) ? explode( ',', $field_post_type ) : array( 'post' );
+
+        /* query posts array */
+        $my_posts = get_posts( apply_filters( 'ot_type_custom_post_type_checkbox_query', array( 'post_type' => $post_type, 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC', 'post_status' => 'any' ), $field_id ) );
+
+        /* has posts */
+        if ( is_array( $my_posts ) && ! empty( $my_posts ) ) {
+          foreach( $my_posts as $my_post ) {
+            $post_title = '' != $my_post->post_title ? $my_post->post_title : 'Untitled';
+
+            $checked = '';
+            if ( is_array($field_value[$my_post->ID]) && !empty($field_value[$my_post->ID]) ) 
+              $checked = checked( $field_value[$my_post->ID]['value'], $my_post->ID, false );
+            else if (  !empty($field_value[$my_post->ID]) ) 
+              $checked = checked( $field_value[$my_post->ID], $my_post->ID, false );
+
+            $order = (is_array($field_value[$my_post->ID]) && !empty($field_value[$my_post->ID]['order']) ) ? $field_value[$my_post->ID]['order'] : '';
+
+            echo '<p>';
+            echo '<input type="checkbox" name="' . esc_attr( $field_name ) . '[' . esc_attr( $my_post->ID ) . '][value]" id="' . esc_attr( $field_id ) . '-' . esc_attr( $my_post->ID ) . '-value" value="' . esc_attr( $my_post->ID ) . '" ' . $checked . ' class="option-tree-ui-checkbox ' . esc_attr( $field_class ) . '" />';
+            echo '<label for="' . esc_attr( $field_id ) . '-' . esc_attr( $my_post->ID ) . '-value">' . $post_title . '</label>';
+
+            echo '<input type="text" name="' . esc_attr( $field_name ) . '[' . esc_attr( $my_post->ID ) . '][order]" id="' . esc_attr( $field_id ) . '-' . esc_attr( $my_post->ID ) . '-order" value="'. $order .'" class="option-tree-ui-input ' . esc_attr( $field_class ) . '" size="1" style="width: auto !important; position: relative; top: -1px; padding: 0px 5px !important; line-height: 1em; margin-left: 5px; text-align: center;" />';
+            echo '<label for="' . esc_attr( $field_id ) . '-' . esc_attr( $my_post->ID ) . '-order">Priority</label>';
+
+            echo '</p>';
+          }
+        } else {
+          echo '<p>' . __( 'No Posts Found', 'option-tree' ) . '</p>';
+        }
+        
+      echo '</div>';
+
+    echo '</div>';
+    
+  }
+  
+}
+
 /**
  * Custom Post Type Select option type.
  *
